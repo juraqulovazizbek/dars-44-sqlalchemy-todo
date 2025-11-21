@@ -6,16 +6,35 @@ from tables import tasks_table
 
 
 def create_task(title: str, description: str | None = None):
-    pass
+    with engine.connect() as connection:
+        stmt = insert(tasks_table).values(title=title, description=description)
+        connection.execute(stmt)
+        connection.commit()
 
 def get_tasks():
-    pass
+    with engine.connect() as connection:
+        stmt = select(tasks_table)
+        return list(connection.execute(stmt))
 
 def update_task(pk: int, title: str | None = None, description: str | None = None):
-    pass
+    with engine.connect() as connection:
+        stmt = update(tasks_table).where(tasks_table.columns.id == pk).values(title=title, description=description)
+        connection.execute(stmt)
+        connection.commit() 
 
 def delete_task(pk: int):
-    pass
+      with engine.connect() as connection:
+        stmt = delete(tasks_table).where(tasks_table.columns.id == pk)
+        connection.execute(stmt)
+        connection.commit() 
 
 def change_task_status(pk: int):
-    pass
+    with engine.connect() as connection:
+        stmt = update(tasks_table).where(tasks_table.columns.id == pk).values(completed=True)
+        connection.execute(stmt)
+        connection.commit() 
+
+# # a = get_user_by_username("rgerg")
+# # print(a)
+    
+# delete_user("vali")
